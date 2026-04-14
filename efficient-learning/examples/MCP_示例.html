@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP - 学习笔记</title>
+    <style>
+        /* ===== 基础样式重置 ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --accent: #3498db;
+            --accent-light: #5dade2;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --bg-main: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-main: #2c3e50;
+            --text-light: #7f8c8d;
+            --border: #e0e0e0;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 16px rgba(0,0,0,0.15);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-light); }
+
+        /* ===== 封面页 ===== */
+        .cover {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1a5276 0%, #2980b9 100%);
+            color: white;
+            text-align: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.5;
+        }
+
+        .cover h1 {
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: -2px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .cover .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            margin-bottom: 40px;
+            font-weight: 300;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover .meta {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover .meta span {
+            background: rgba(255,255,255,0.15);
+            padding: 10px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* ===== 导航栏 ===== */
+        nav {
+            background: var(--bg-card);
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        nav .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        nav .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: var(--transition);
+        }
+
+        nav .nav-links a:hover { color: var(--accent); }
+        nav .nav-links a:hover::after { width: 100%; }
+
+        /* ===== 主体内容区 ===== */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .module {
+            margin-bottom: 60px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .module h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .module h3 {
+            font-size: 1.4rem;
+            color: var(--primary-light);
+            margin: 30px 0 15px 0;
+        }
+
+        /* ===== 卡片样式 ===== */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-left: 4px solid var(--accent);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .card.example { border-left-color: var(--success); }
+        .card.warning { border-left-color: var(--warning); }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-content p {
+            margin-bottom: 12px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffeaa7 0%, #ffeaa7 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 88%;
+            padding: 0 4px;
+        }
+
+        /* ===== 概念定义框 ===== */
+        .concept-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-box::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 150px;
+            opacity: 0.1;
+            font-family: Georgia, serif;
+        }
+
+        .concept-box h3 {
+            color: white;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .concept-box .definition {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== 要点列表 ===== */
+        .key-points {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .key-points li {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            background: var(--bg-main);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .key-points li::before {
+            content: '✓';
+            position: absolute;
+            left: 20px;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* ===== 记忆法卡片 ===== */
+        .memory-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .memory-card .mnemonic {
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 20px 0;
+            letter-spacing: 2px;
+            font-family: Georgia, serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .memory-card .explanation {
+            opacity: 0.95;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        /* ===== 提示框 ===== */
+        .tip {
+            background: #e8f5e9;
+            border-left: 4px solid var(--success);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .caution {
+            background: #fff3e0;
+            border-left: 4px solid var(--warning);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        /* ===== 图示容器 ===== */
+        .diagram-container {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .diagram-container svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .diagram-caption {
+            margin-top: 15px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ===== 知识关联 ===== */
+        .knowledge-map {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .related-concepts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .concept-tag {
+            padding: 10px 20px;
+            background: var(--bg-main);
+            border-radius: 25px;
+            border: 2px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .concept-tag.prerequisite { border-color: var(--success); background: #e8f5e9; }
+        .concept-tag.extension { border-color: var(--accent); background: #e3f2fd; }
+        .concept-tag.related { border-color: var(--warning); background: #fff3e0; }
+
+        /* ===== 打印优化 ===== */
+        @media print {
+            .cover {
+                min-height: auto;
+                padding: 60px 40px;
+                page-break-after: always;
+            }
+            nav { display: none; }
+            .scroll-indicator { display: none; }
+            main { padding: 40px; }
+            .card { break-inside: avoid; }
+            body { background: white; }
+        }
+
+        /* ===== 响应式设计 ===== */
+        @media (max-width: 768px) {
+            .cover h1 { font-size: 2.5rem; }
+            .cover .subtitle { font-size: 1.1rem; }
+            .cover .meta { flex-direction: column; gap: 10px; }
+            nav .nav-links { display: none; }
+            main { padding: 30px 20px; }
+            .module h2 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 封面页 -->
+    <section class="cover">
+        <h1>MCP</h1>
+        <p class="subtitle">Model Context Protocol - AI世界的USB-C接口，连接大模型与外部世界的通用协议</p>
+        <div class="meta">
+            <span>难度：⭐⭐</span>
+            <span>预计学习时间：25分钟</span>
+            <span>生成时间：2026-04-14</span>
+        </div>
+        <div class="scroll-indicator">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">📚 学习笔记</div>
+            <ul class="nav-links">
+                <li><a href="#examples">生活化例子</a></li>
+                <li><a href="#concept">概念讲解</a></li>
+                <li><a href="#memory">简单记法</a></li>
+                <li><a href="#diagrams">图示</a></li>
+                <li><a href="#related">知识关联</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主体内容 -->
+    <main>
+        <!-- 模块一：生活化例子 -->
+        <section id="examples" class="module">
+            <h2>🌟 生活化例子</h2>
+            
+            <div class="card example">
+                <div class="card-title">📌 例子1：USB-C接口</div>
+                <div class="card-content">
+                    <p><strong>场景：</strong>以前每种电子设备都有不同的充电口——手机用Micro-USB，苹果用Lightning，电脑用Type-A...</p>
+                    <p><strong>类比：</strong>USB-C出现后，一个接口可以充手机、充电脑、连显示器、传数据。<span class="highlight">MCP就是AI世界的USB-C</span>，让AI模型用统一的方式连接各种数据源和工具。</p>
+                    <p><strong>启示：</strong>统一标准的好处是：一次实现，到处使用。开发者不需要为每个AI工具单独写集成代码。</p>
+                </div>
+            </div>
+
+            <div class="card example">
+                <div class="card-title">📌 例子2：餐厅服务员点餐系统</div>
+                <div class="card-content">
+                    <p><strong>场景：</strong>你是餐厅服务员（AI模型），厨房有各种菜品的制作方法（工具），但你不需要知道每道菜怎么做的细节。</p>
+                    <p><strong>类比：</strong>MCP就像一套标准的<span class="highlight">点餐流程和菜单格式</span>。你只需要按标准格式写订单（调用请求），厨房就能明白并执行，无论这道菜是炒菜、煲汤还是甜品。</p>
+                    <p><strong>启示：</strong>MCP定义了AI与工具之间的"沟通语言"，让双方能够互相理解。</p>
+                </div>
+            </div>
+
+            <div class="card example">
+                <div class="card-title">📌 例子3：翻译官</div>
+                <div class="card-content">
+                    <p><strong>场景：</strong>你（AI模型）去一个外国（外部系统），但不会说当地语言，于是请了一个翻译官（MCP）。</p>
+                    <p><strong>类比：</strong>翻译官不仅帮你把话翻译成当地语言，还能帮你理解对方的回答。<span class="highlight">MCP是双向的</span>——既能把AI的请求传给工具，也能把工具的结果传回给AI。</p>
+                    <p><strong>启示：</strong>MCP让AI和外部系统能够"对话"，而不需要AI去学习每个系统的"方言"。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 模块二：概念讲解 -->
+        <section id="concept" class="module">
+            <h2>📚 概念讲解</h2>
+            
+            <div class="concept-box">
+                <h3>🎯 核心定义</h3>
+                <p class="definition">
+                    MCP（Model Context Protocol，模型上下文协议）是由Anthropic推出的<span class="highlight">开放标准协议</span>，
+                    它定义了AI模型如何与外部数据源、工具进行安全、双向、标准化的连接。
+                    简单来说，MCP让AI能够"看到"和"使用"外部世界的数据和功能。
+                </p>
+            </div>
+
+            <h3>MCP的核心组成</h3>
+            <ul class="key-points">
+                <li><strong>MCP服务器（Server）：</strong>暴露数据源或工具的一方。比如连接GitHub、数据库、文件系统的服务。</li>
+                <li><strong>MCP客户端（Client）：</strong>使用这些服务的AI应用。比如Claude、Cursor等支持MCP的工具。</li>
+                <li><strong>协议规范：</strong>定义双方如何通信、如何发现能力、如何传输数据的标准。</li>
+                <li><strong>双向连接：</strong>不仅是AI调用工具，工具也可以主动为AI提供上下文信息。</li>
+            </ul>
+
+            <h3>为什么需要MCP？</h3>
+            <p>在MCP出现之前，如果你想让AI连接GitHub、查数据库、读文件，需要：</p>
+            <div class="card warning">
+                <div class="card-title">⚠️ 没有MCP的世界</div>
+                <div class="card-content">
+                    <p>• 为每个数据源写定制化的集成代码</p>
+                    <p>• 每个AI工具（Claude、GPT、Cursor）的集成方式都不一样</p>
+                    <p>• 重复造轮子，维护成本高</p>
+                    <p>• 开发者被困在信息孤岛中</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">✨ 有了MCP的世界</div>
+                <div class="card-content">
+                    <p>• <span class="highlight">一次实现，到处使用</span>：写一次MCP服务器，所有支持MCP的AI都能用</p>
+                    <p>• 生态共享：GitHub、Stripe、Notion等公司提供官方MCP服务器</p>
+                    <p>• 标准化降低了接入门槛</p>
+                    <p>• AI真正能够"动手做事"，而不只是聊天</p>
+                </div>
+            </div>
+
+            <div class="tip">
+                <strong>💡 一句话总结：</strong>MCP让AI从"孤岛中的天才"变成了"能与世界互动的助手"。
+            </div>
+
+            <div class="caution">
+                <strong>⚠️ 常见误区：</strong>MCP不是某个具体的产品或工具，而是一个<span class="highlight">协议标准</span>。
+                就像HTTP是网页传输的协议，MCP是AI与工具通信的协议。你可以基于MCP开发产品，但MCP本身不是产品。
+            </div>
+        </section>
+
+        <!-- 模块三：简单记法 -->
+        <section id="memory" class="module">
+            <h2>🧠 简单记法</h2>
+            
+            <div class="memory-card">
+                <div class="card-title">🎯 MCP记忆口诀</div>
+                <div class="mnemonic">"MCP = Model 连 Context 靠 Protocol"</div>
+                <div class="explanation">
+                    模型(M) 连接(C) 上下文靠 协议(P)
+                </div>
+            </div>
+
+            <h3>联想记忆：AI的"万能转接头"</h3>
+            <div class="card">
+                <div class="card-content">
+                    <p>想象你出国旅行，带了各种电器（AI模型）：</p>
+                    <p>• 手机、电脑、相机...每个都要充电</p>
+                    <p>• 不同国家有不同的插座（外部系统）</p>
+                    <p>• MCP就是一个<span class="highlight">万能转接头</span>，一头插AI，一头插任何系统</p>
+                    <p>• 你只需要带一个转接头，就能走天下</p>
+                </div>
+            </div>
+
+            <h3>核心要点速记</h3>
+            <ul class="key-points">
+                <li><strong>M = Model：</strong>大语言模型，AI助手</li>
+                <li><strong>C = Context：</strong>上下文，包括数据和工具</li>
+                <li><strong>P = Protocol：</strong>协议，通信规则和标准</li>
+                <li><strong>双向连接：</strong>不只是AI问问题，工具也能主动提供信息</li>
+                <li><strong>开放标准：</strong>不是某家公司的私有协议</li>
+            </ul>
+        </section>
+
+        <!-- 模块四：图示 -->
+        <section id="diagrams" class="module">
+            <h2>📊 图示</h2>
+            
+            <div class="diagram-container">
+                <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 标题 -->
+                    <text x="350" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#2c3e50">MCP架构示意图</text>
+                    
+                    <!-- AI模型 -->
+                    <rect x="50" y="80" width="140" height="80" rx="10" fill="#9b59b6" stroke="#8e44ad" stroke-width="2"/>
+                    <text x="120" y="115" text-anchor="middle" fill="white" font-size="16" font-weight="bold">AI模型</text>
+                    <text x="120" y="140" text-anchor="middle" fill="#e8daef" font-size="12">Claude/GPT等</text>
+                    
+                    <!-- MCP客户端 -->
+                    <rect x="280" y="80" width="140" height="80" rx="10" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+                    <text x="350" y="115" text-anchor="middle" fill="white" font-size="14" font-weight="bold">MCP客户端</text>
+                    <text x="350" y="140" text-anchor="middle" fill="#d6eaf8" font-size="11">Client</text>
+                    
+                    <!-- MCP协议层 -->
+                    <rect x="230" y="200" width="240" height="60" rx="8" fill="#f39c12" stroke="#d68910" stroke-width="2"/>
+                    <text x="350" y="235" text-anchor="middle" fill="white" font-size="15" font-weight="bold">MCP Protocol</text>
+                    <text x="350" y="252" text-anchor="middle" fill="#fdebd0" font-size="11">标准通信协议</text>
+                    
+                    <!-- MCP服务器 -->
+                    <rect x="50" y="300" width="140" height="80" rx="10" fill="#27ae60" stroke="#1e8449" stroke-width="2"/>
+                    <text x="120" y="335" text-anchor="middle" fill="white" font-size="14" font-weight="bold">MCP服务器</text>
+                    <text x="120" y="360" text-anchor="middle" fill="#d5f5e3" font-size="11">GitHub</text>
+                    
+                    <rect x="280" y="300" width="140" height="80" rx="10" fill="#27ae60" stroke="#1e8449" stroke-width="2"/>
+                    <text x="350" y="335" text-anchor="middle" fill="white" font-size="14" font-weight="bold">MCP服务器</text>
+                    <text x="350" y="360" text-anchor="middle" fill="#d5f5e3" font-size="11">Database</text>
+                    
+                    <rect x="510" y="300" width="140" height="80" rx="10" fill="#27ae60" stroke="#1e8449" stroke-width="2"/>
+                    <text x="580" y="335" text-anchor="middle" fill="white" font-size="14" font-weight="bold">MCP服务器</text>
+                    <text x="580" y="360" text-anchor="middle" fill="#d5f5e3" font-size="11">File System</text>
+                    
+                    <!-- 连接箭头 -->
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#7f8c8d"/>
+                        </marker>
+                    </defs>
+                    
+                    <line x1="190" y1="120" x2="280" y2="120" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text x="235" y="110" text-anchor="middle" font-size="11" fill="#7f8c8d">请求</text>
+                    
+                    <line x1="350" y1="160" x2="350" y2="200" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <line x1="310" y1="260" x2="150" y2="300" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="350" y1="260" x2="350" y2="300" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="390" y1="260" x2="550" y2="300" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <!-- 双向箭头返回 -->
+                    <line x1="150" y1="300" x2="310" y2="260" stroke="#3498db" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow)"/>
+                    <text x="400" y="280" font-size="10" fill="#3498db">双向通信</text>
+                </svg>
+                <div class="diagram-caption">MCP架构：AI模型通过MCP协议连接各种数据源</div>
+            </div>
+
+            <div class="diagram-container">
+                <svg viewBox="0 0 700 350" xmlns="http://www.w3.org/2000/svg">
+                    <text x="350" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#2c3e50">MCP vs 传统集成方式对比</text>
+                    
+                    <!-- 传统方式 -->
+                    <rect x="50" y="60" width="280" height="260" rx="10" fill="#ffebee" stroke="#e74c3c" stroke-width="2"/>
+                    <text x="190" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#c0392b">传统方式（没有MCP）</text>
+                    
+                    <text x="70" y="120" font-size="12" fill="#2c3e50">AI模型</text>
+                    <line x1="70" y1="125" x2="150" y2="125" stroke="#e74c3c" stroke-width="2"/>
+                    <text x="155" y="130" font-size="10" fill="#7f8c8d">定制代码A</text>
+                    <rect x="160" y="110" width="80" height="30" rx="5" fill="#ffcdd2"/>
+                    <text x="200" y="130" text-anchor="middle" font-size="11" fill="#c0392b">GitHub</text>
+                    
+                    <line x1="70" y1="165" x2="150" y2="165" stroke="#e74c3c" stroke-width="2"/>
+                    <text x="155" y="170" font-size="10" fill="#7f8c8d">定制代码B</text>
+                    <rect x="160" y="150" width="80" height="30" rx="5" fill="#ffcdd2"/>
+                    <text x="200" y="170" text-anchor="middle" font-size="11" fill="#c0392b">Database</text>
+                    
+                    <line x1="70" y1="205" x2="150" y2="205" stroke="#e74c3c" stroke-width="2"/>
+                    <text x="155" y="210" font-size="10" fill="#7f8c8d">定制代码C</text>
+                    <rect x="160" y="190" width="80" height="30" rx="5" fill="#ffcdd2"/>
+                    <text x="200" y="210" text-anchor="middle" font-size="11" fill="#c0392b">Files</text>
+                    
+                    <text x="190" y="270" text-anchor="middle" font-size="12" fill="#e74c3c">❌ 重复造轮子</text>
+                    <text x="190" y="295" text-anchor="middle" font-size="12" fill="#e74c3c">❌ 维护成本高</text>
+                    
+                    <!-- MCP方式 -->
+                    <rect x="370" y="60" width="280" height="260" rx="10" fill="#e8f5e9" stroke="#27ae60" stroke-width="2"/>
+                    <text x="510" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e8449">MCP方式</text>
+                    
+                    <text x="390" y="120" font-size="12" fill="#2c3e50">AI模型</text>
+                    <line x1="390" y1="125" x2="460" y2="125" stroke="#27ae60" stroke-width="3"/>
+                    <rect x="465" y="110" width="80" height="30" rx="5" fill="#81c784"/>
+                    <text x="505" y="130" text-anchor="middle" font-size="11" fill="white" font-weight="bold">MCP</text>
+                    
+                    <line x1="545" y1="125" x2="590" y2="125" stroke="#27ae60" stroke-width="2"/>
+                    <rect x="570" y="110" width="60" height="30" rx="5" fill="#c8e6c9"/>
+                    <text x="600" y="130" text-anchor="middle" font-size="10" fill="#1b5e20">GitHub</text>
+                    
+                    <line x1="545" y1="165" x2="590" y2="165" stroke="#27ae60" stroke-width="2"/>
+                    <rect x="570" y="150" width="60" height="30" rx="5" fill="#c8e6c9"/>
+                    <text x="600" y="170" text-anchor="middle" font-size="10" fill="#1b5e20">Database</text>
+                    
+                    <line x1="545" y1="205" x2="590" y2="205" stroke="#27ae60" stroke-width="2"/>
+                    <rect x="570" y="190" width="60" height="30" rx="5" fill="#c8e6c9"/>
+                    <text x="600" y="210" text-anchor="middle" font-size="10" fill="#1b5e20">Files</text>
+                    
+                    <text x="510" y="270" text-anchor="middle" font-size="12" fill="#27ae60">✅ 统一标准</text>
+                    <text x="510" y="295" text-anchor="middle" font-size="12" fill="#27ae60">✅ 一次实现到处用</text>
+                </svg>
+                <div class="diagram-caption">传统方式 vs MCP方式：标准化带来的效率提升</div>
+            </div>
+
+            <div class="diagram-container">
+                <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                    <text x="350" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#2c3e50">MCP发展时间线</text>
+                    
+                    <!-- 时间线主轴 -->
+                    <line x1="80" y1="200" x2="620" y2="200" stroke="#bdc3c7" stroke-width="4"/>
+                    
+                    <!-- 2024年11月 -->
+                    <circle cx="150" cy="200" r="15" fill="#3498db" stroke="#2980b9" stroke-width="3"/>
+                    <text x="150" y="160" text-anchor="middle" font-size="13" font-weight="bold">2024.11</text>
+                    <text x="150" y="240" text-anchor="middle" font-size="11" fill="#7f8c8d">MCP发布</text>
+                    <text x="150" y="260" text-anchor="middle" font-size="10" fill="#7f8c8d">Anthropic开源</text>
+                    
+                    <!-- 2025年初 -->
+                    <circle cx="300" cy="200" r="15" fill="#9b59b6" stroke="#8e44ad" stroke-width="3"/>
+                    <text x="300" y="160" text-anchor="middle" font-size="13" font-weight="bold">2025初</text>
+                    <text x="300" y="240" text-anchor="middle" font-size="11" fill="#7f8c8d">生态爆发</text>
+                    <text x="300" y="260" text-anchor="middle" font-size="10" fill="#7f8c8d">Cursor等接入</text>
+                    
+                    <!-- 2025年11月 -->
+                    <circle cx="450" cy="200" r="15" fill="#e74c3c" stroke="#c0392b" stroke-width="3"/>
+                    <text x="450" y="160" text-anchor="middle" font-size="13" font-weight="bold">2025.11</text>
+                    <text x="450" y="240" text-anchor="middle" font-size="11" fill="#7f8c8d">一周年</text>
+                    <text x="450" y="260" text-anchor="middle" font-size="10" fill="#7f8c8d">企业功能发布</text>
+                    
+                    <!-- 2025年12月 -->
+                    <circle cx="580" cy="200" r="15" fill="#27ae60" stroke="#1e8449" stroke-width="3"/>
+                    <text x="580" y="160" text-anchor="middle" font-size="13" font-weight="bold">2025.12</text>
+                    <text x="580" y="240" text-anchor="middle" font-size="11" fill="#7f8c8d">捐赠社区</text>
+                    <text x="580" y="260" text-anchor="middle" font-size="10" fill="#7f8c8d">成立基金会</text>
+                    
+                    <!-- 箭头 -->
+                    <polygon points="620,195 620,205 635,200" fill="#bdc3c7"/>
+                    
+                    <!-- 说明 -->
+                    <text x="350" y="330" text-anchor="middle" font-size="13" fill="#2c3e50">从发布到成为行业标准，仅用一年时间</text>
+                </svg>
+                <div class="diagram-caption">MCP从诞生到成为行业标准的发展历程</div>
+            </div>
+        </section>
+
+        <!-- 模块五：知识关联 -->
+        <section id="related" class="module">
+            <h2>🔗 知识关联</h2>
+            
+            <div class="knowledge-map">
+                <h3>前置知识（建议先了解）</h3>
+                <div class="related-concepts">
+                    <span class="concept-tag prerequisite">API接口基础</span>
+                    <span class="concept-tag prerequisite">客户端-服务器架构</span>
+                    <span class="concept-tag prerequisite">AI大模型基础</span>
+                </div>
+            </div>
+
+            <div class="knowledge-map">
+                <h3>延伸学习（掌握MCP后可以学习）</h3>
+                <div class="related-concepts">
+                    <span class="concept-tag extension">MCP服务器开发</span>
+                    <span class="concept-tag extension">Function Calling</span>
+                    <span class="concept-tag extension">Google A2A协议</span>
+                    <span class="concept-tag extension">AI Agent架构</span>
+                </div>
+            </div>
+
+            <div class="knowledge-map">
+                <h3>相关概念</h3>
+                <div class="related-concepts">
+                    <span class="concept-tag related">OpenAI Function Calling</span>
+                    <span class="concept-tag related">LangChain框架</span>
+                    <span class="concept-tag related">API网关</span>
+                    <span class="concept-tag related">GraphQL</span>
+                    <span class="concept-tag related">WebSocket</span>
+                </div>
+            </div>
+
+            <div class="tip">
+                <strong>💡 学习建议：</strong>理解MCP最好的方式是动手实践。
+                可以尝试在Claude Desktop或Cursor中配置一个MCP服务器（如GitHub MCP），
+                亲身体验AI如何通过MCP与外部工具交互。
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 滚动时导航栏效果
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 100) {
+                nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                nav.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+            }
+        });
+
+        // 滚动指示器点击
+        document.querySelector('.scroll-indicator').addEventListener('click', () => {
+            document.querySelector('nav').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

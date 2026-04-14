@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "高效学习助手配置",
+  "description": "Efficient Learning Assistant Skill Configuration",
+  "type": "object",
+  "properties": {
+    "output": {
+      "type": "object",
+      "description": "输出配置",
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["html", "markdown", "pdf"],
+          "default": "html",
+          "description": "默认输出格式"
+        },
+        "template": {
+          "type": "string",
+          "default": "default",
+          "description": "使用的模板名称"
+        },
+        "save_directory": {
+          "type": "string",
+          "default": "./output",
+          "description": "学习笔记保存目录"
+        }
+      }
+    },
+    "content": {
+      "type": "object",
+      "description": "内容生成配置",
+      "properties": {
+        "include_examples": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否包含生活化例子"
+        },
+        "include_diagrams": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否包含可视化图示"
+        },
+        "include_memory_tips": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否包含记忆技巧"
+        },
+        "include_exercises": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否包含练习题"
+        },
+        "example_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "default": 3,
+          "description": "生活化例子数量"
+        }
+      }
+    },
+    "style": {
+      "type": "object",
+      "description": "样式配置",
+      "properties": {
+        "theme": {
+          "type": "string",
+          "enum": ["default", "dark", "minimal", "colorful"],
+          "default": "default",
+          "description": "主题风格"
+        },
+        "primary_color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#2c3e50",
+          "description": "主色调（HEX格式）"
+        },
+        "font_size": {
+          "type": "string",
+          "enum": ["small", "normal", "large"],
+          "default": "normal",
+          "description": "字体大小"
+        }
+      }
+    },
+    "advanced": {
+      "type": "object",
+      "description": "高级配置",
+      "properties": {
+        "enable_animations": {
+          "type": "boolean",
+          "default": true,
+          "description": "启用交互动画"
+        },
+        "enable_print_optimization": {
+          "type": "boolean",
+          "default": true,
+          "description": "启用打印优化"
+        },
+        "svg_renderer": {
+          "type": "string",
+          "enum": ["inline", "external"],
+          "default": "inline",
+          "description": "SVG渲染方式"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
