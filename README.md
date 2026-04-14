@@ -42,7 +42,7 @@
 
 ---
 
-## 📁 项目结构
+## 2、项目结构
 
 ```
 efficient-learning/
@@ -64,7 +64,7 @@ efficient-learning/
 
 ---
 
-## 🎯 核心特性
+## 3、核心特性
 
 | 特性 | 说明 |
 |-----|------|
@@ -76,9 +76,9 @@ efficient-learning/
 
 ---
 
-## 🛠️ 使用方法
+## 4、使用方法
 
-### 1. 基础使用
+### 1） 基础使用
 
 直接描述你的学习需求：
 
@@ -87,7 +87,7 @@ efficient-learning/
 - 商业理论：`怎么理解沉没成本`
 - 数学公式：`给我讲讲贝叶斯定理`
 
-### 2. 输出位置
+### 2） 输出位置
 
 学习笔记默认生成在用户工作目录，文件命名：
 
@@ -95,7 +95,7 @@ efficient-learning/
 [概念名]_学习笔记.html
 ```
 
-### 3. 查看方式
+### 3） 查看方式
 
 - 用浏览器打开 HTML 文件
 - 支持滚动阅读、导航跳转
@@ -103,27 +103,27 @@ efficient-learning/
 
 ---
 
-## 📋 内容模块
+## 5、内容模块
 
 生成的学习笔记包含以下模块：
 
 ### 必含模块
 
-1. **生活化例子** (2-4个)
+1） **生活化例子** (2-4个)
    - 贴近日常的场景类比
    - 从简单到复杂递进
 
-2. **概念讲解**
+2） **概念讲解**
    - 一句话定义
    - 通俗解释
    - 核心要点
    - 常见误区
 
-3. **简单记法**
+3） **简单记法**
    - 口诀、联想、首字母缩写
    - 记忆宫殿、故事串联
 
-4. **可视化图示**
+4） **可视化图示**
    - 流程图、树状图、关系图
    - SVG 矢量图，清晰可缩放
 
@@ -135,7 +135,7 @@ efficient-learning/
 
 ---
 
-## ⚙️ 配置说明
+## 6、配置说明
 
 通过 `agents/config.schema.json` 可自定义：
 
@@ -156,7 +156,7 @@ efficient-learning/
 
 ---
 
-## 📝 示例展示
+## 7、示例展示
 
 ### 示例 1：递归 (Recursion)
 
@@ -175,33 +175,16 @@ efficient-learning/
 
 ---
 
-## 🤝 贡献指南
-
-欢迎提交 Issue 和 PR：
-
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送分支 (`git push origin feature/AmazingFeature`)
-5. 创建 Pull Request
-
----
-
-## 📄 许可证
-
-[MIT](LICENSE)
-
----
 
 <a name="english"></a>
 
-# 📚 Efficient Learning Assistant
+# Efficient Learning Assistant
 
 > Learn any concept faster with relatable examples and visualization
 
 ---
 
-## ✨ What is this
+##  What is this
 
 A **learning-enhancement SKILL** that helps you understand any concept through multi-modal learning:
 
@@ -214,7 +197,7 @@ Generates **beautiful interactive HTML learning notes**.
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Trigger Phrases
 
@@ -228,7 +211,7 @@ Generates **beautiful interactive HTML learning notes**.
 
 ---
 
-## 📋 Content Modules
+##  Content Modules
 
 1. **Examples** (2-4 relatable scenarios)
 2. **Concept Explanation** (definition + key points + misconceptions)
@@ -237,7 +220,7 @@ Generates **beautiful interactive HTML learning notes**.
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 Customize via `agents/config.schema.json`:
 
