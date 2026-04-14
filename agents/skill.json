@@ -1,0 +1,57 @@
+{
+  "id": "efficient-learning",
+  "name": "高效学习助手",
+  "name_en": "Efficient Learning Assistant",
+  "version": "1.0.0",
+  "description": "用生活化例子、通俗讲解、记忆口诀和可视化图示，帮你快速掌握任何概念。生成精美排版的交互式HTML学习笔记。",
+  "description_en": "Master any concept with relatable examples, clear explanations, memory tricks, and visual diagrams. Generates beautifully formatted interactive HTML learning notes.",
+  "author": "Khazix Community",
+  "icon": "📚",
+  "tags": [
+    "learning",
+    "education",
+    "tutorial",
+    "visualization",
+    "study"
+  ],
+  "categories": [
+    "productivity",
+    "education"
+  ],
+  "triggers": [
+    "帮我学习",
+    "解释一下",
+    "怎么理解",
+    "如何记忆",
+    "给我举个例子",
+    "画个图说明",
+    "生成知识卡片",
+    "学习笔记",
+    "快速掌握",
+    "深入浅出",
+    "通俗讲解"
+  ],
+  "entry_point": "SKILL.md",
+  "license": "MIT",
+  "homepage": "https://github.com/khazix-skills/efficient-learning",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/khazix-skills/efficient-learning.git"
+  },
+  "requirements": [
+    "Python 3.8+",
+    "markdown",
+    "playwright (optional, for PDF export)"
+  ],
+  "features": [
+    "生活化例子讲解",
+    "通俗概念解释",
+    "记忆技巧与口诀",
+    "SVG可视化图示",
+    "精美HTML输出",
+    "响应式设计",
+    "打印友好"
+  ],
+  "supported_languages": ["zh-CN", "en"],
+  "min_api_version": "1.0.0"
+}
